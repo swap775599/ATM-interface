@@ -1,0 +1,84 @@
+package A;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ATM atm = new ATM(10000); 
+        
+        User[] users = {
+            new User("user1", "1234", 500),
+            new User("user2", "5678", 1000)
+        };
+
+        System.out.println("Welcome to the ATM!");
+
+      
+        boolean isAuthenticated = false;
+        User authenticatedUser = null;
+        while (!isAuthenticated) {
+            System.out.print("Enter User ID: ");
+            String userID = scanner.nextLine();
+            System.out.print("Enter PIN: ");
+            String pin = scanner.nextLine();
+
+           
+            for (User user : users) {
+                if (user.getUserID().equals(userID) && user.getUserPIN().equals(pin)) {
+                    isAuthenticated = true;
+                    authenticatedUser = user;
+                    break;
+                }
+            }
+
+            if (!isAuthenticated) {
+                System.out.println("Invalid credentials. Please try again.");
+            }
+        }
+
+        // Main menu
+        boolean exit = false;
+        while (!exit) {
+            System.out.println("\nMain Menu:");
+            System.out.println("1. Check Balance");
+            System.out.println("2. Withdraw Money");
+            System.out.println("3. Deposit Money");
+            System.out.println("4. Exit");
+
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Your balance: $" + atm.checkBalance(authenticatedUser));
+                    break;
+                case 2:
+                    System.out.print("Enter amount to withdraw: $");
+                    double withdrawAmount = scanner.nextDouble();
+                    scanner.nextLine(); // Consume newline
+                    if (atm.withdraw(authenticatedUser, withdrawAmount)) {
+                        System.out.println("Withdrawal successful.");
+                    } else {
+                        System.out.println("Withdrawal failed. Please check your input or account balance.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter amount to deposit: $");
+                    double depositAmount = scanner.nextDouble();
+                    scanner.nextLine(); // Consume newline
+                    atm.deposit(authenticatedUser, depositAmount);
+                    System.out.println("Deposit successful.");
+                    break;
+                case 4:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+        System.out.println("Thank you for using the ATM!");
+    }
+}
