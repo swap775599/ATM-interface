@@ -1,0 +1,37 @@
+package A;
+
+public class ATM {
+    private double totalCash;
+    
+    
+    public ATM(double totalCash) {
+        this.totalCash = totalCash;
+    }
+
+   
+    public double checkBalance(User user) {
+        return user.getAccountBalance();
+    }
+
+    
+    public boolean withdraw(User user, double amount) {
+        if (amount > totalCash || amount > user.getAccountBalance() || amount <= 0) {
+            return false; 
+        }
+        
+        user.setAccountBalance(user.getAccountBalance() - amount);
+        totalCash -= amount;
+        return true;
+    }
+
+
+    public void deposit(User user, double amount) {
+        if (amount <= 0) {
+            return; 
+        }
+       
+        user.setAccountBalance(user.getAccountBalance() + amount);
+        totalCash += amount;
+    }
+}
+
